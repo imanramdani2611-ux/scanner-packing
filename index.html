@@ -176,10 +176,17 @@
       if (scanner) return;
 
       scanner = new Html5Qrcode("reader", {
-        formatsToSupport: [
-          Html5QrcodeSupportedFormats.CODE_128
-        ]
-      });
+  formatsToSupport: [
+    Html5QrcodeSupportedFormats.CODE_128,
+    Html5QrcodeSupportedFormats.CODE_39,
+    Html5QrcodeSupportedFormats.CODE_93,
+    Html5QrcodeSupportedFormats.EAN_13,
+    Html5QrcodeSupportedFormats.EAN_8,
+    Html5QrcodeSupportedFormats.UPC_A,
+    Html5QrcodeSupportedFormats.UPC_E,
+    Html5QrcodeSupportedFormats.ITF
+  ]
+});
 
 
       scanner.start(
@@ -187,13 +194,15 @@
           facingMode: "environment"
         },
         {
-          fps: 10,
+  fps: 15,
 
-          qrbox: {
-            width: 320,
-            height: 150
-          }
-        },
+  qrbox: {
+    width: 350,
+    height: 180
+  },
+
+  aspectRatio: 1.777778
+}
 
         // ======================================
         // BARCODE TERBACA
@@ -208,9 +217,6 @@
           if (!nomorPesanan) return;
 
           sedangMemproses = true;
-
-          // Hentikan pembacaan sementara
-          scanner.pause(true);
 
           document.getElementById("hasil").innerHTML =
             "🔍 <b>Mengecek nomor pesanan...</b><br><br>" +
