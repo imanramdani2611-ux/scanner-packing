@@ -140,69 +140,124 @@
   <script src="https://unpkg.com/html5-qrcode"></script>
 
   <script>
-    let scanner = null;
-    let nomorPesanan = "";
+  let scanner = null;
+  let nomorPesanan = "";
+  let sedangScan = false;
 
-    function mulaiScanner() {
-      if (scanner) return;
+  function mulaiScanner() {
 
-      document.getElementById("hasil").innerText = "Membuka kamera...";
+    if (sedangScan) return;
 
-      scanner = new Html5Qrcode("reader");
+    sedangScan = true;
 
-      scanner.start(
-        { facingMode: "environment" },
-        {
-          fps: 10,
-          qrbox: { width: 280, height: 140 }
+    const hasil = document.getElementById("hasil");
+    const btnScan = document.getElementById("btnScan");
+    const pilihan = document.getElementById("pilihan");
+
+    pilihan.style.display = "none";
+
+    hasil.innerText = "📷 Menyiapkan kamera...";
+    btnScan.disabled = true;
+    btnScan.style.opacity = "0.6";
+
+    scanner = new Html5Qrcode("reader");
+
+    scanner.start(
+
+      {
+        facingMode: "environment"
+      },
+
+      {
+        fps: 10,
+        qrbox: {
+          width: 280,
+          height: 140
         },
-        function(decodedText) {
+        aspectRatio: 1.777778
+      },
 
-          nomorPesanan = decodedText.trim();
+      function(decodedText) {
 
-          document.getElementById("hasil").innerText =
-            "Nomor Pesanan: " + nomorPesanan;
+        nomorPesanan = decodedText.trim();
 
-          scanner.stop().then(function() {
-            scanner.clear();
-            scanner = null;
-            document.getElementById("pilihan").style.display = "block";
-          }).catch(function() {
-            scanner = null;
-            document.getElementById("pilihan").style.display = "block";
-          });
+        hasil.innerText =
+          "✅ Nomor Pesanan:\n" + nomorPesanan;
 
-        },
-        function(errorMessage) {
-          // Abaikan error scan sementara
-        }
-      ).catch(function(error) {
+        scanner.stop().then(function() {
 
-        document.getElementById("hasil").innerText =
-          "❌ Kamera tidak bisa dibuka. Pastikan izin kamera untuk browser sudah diizinkan.";
+          scanner.clear();
+          scanner = null;
+          sedangScan = false;
 
-        scanner = null;
-      });
-    }
+          btnScan.disabled = false;
+          btnScan.style.opacity = "1";
+          btnScan.innerText = "📷 SCAN LAGI";
 
-    function pilihAda() {
-      document.getElementById("hasil").innerText =
-        "Nomor Pesanan: " + nomorPesanan +
-        "\n\nMemproses ANTRIAN PACKING...";
+          pilihan.style.display = "block";
 
-      // Endpoint Apps Script akan kita sambungkan setelah scanner
-      // berhasil berjalan di HP.
-    }
+        }).catch(function() {
 
-    function pilihBelum() {
-      document.getElementById("hasil").innerText =
-        "Nomor Pesanan: " + nomorPesanan +
-        "\n\nStatus tetap FINISHING.";
+          scanner = null;
+          sedangScan = false;
 
-      document.getElementById("pilihan").style.display = "none";
-      nomorPesanan = "";
-    }
-  </script>
+          btnScan.disabled = false;
+          btnScan.style.opacity = "1";
 
-</body>
-</html>
+          pilihan.style.display = "block";
+        });
+
+      },
+
+      function(errorMessage) {
+        // Error scan diabaikan selama kamera masih aktif
+      }
+
+    ).then(function() {
+
+      // INI YANG SEBELUMNYA BELUM ADA
+      hasil.innerText =
+        "🟢 KAMERA AKTIF\nArahkan kamera ke QR pesanan";
+
+    }).catch(function(error) {
+
+      console.error(error);
+
+      hasil.innerText =
+        "❌ Kamera tidak bisa dibuka.\n\n" +
+        "Pastikan izin kamera browser sudah aktif.";
+
+      scanner = null;
+      sedangScan = false;
+
+      btnScan.disabled = false;
+      btnScan.style.opacity = "1";
+    });
+  }
+
+
+  function pilihAda() {
+
+    document.getElementById("hasil").innerText =
+      "Nomor Pesanan: " + nomorPesanan +
+      "\n\n⏳ Memproses ANTRIAN PACKING...";
+
+    // NANTI kita sambungkan ke Apps Script
+  }
+
+
+  function pilihBelum() {
+
+    document.getElementById("hasil").innerText =
+      "Nomor Pesanan: " + nomorPesanan +
+      "\n\nStatus tetap FINISHING.";
+
+    document.getElementById("pilihan").style.display = "none";
+
+    nomorPesanan = "";
+
+    const btnScan = document.getElementById("btnScan");
+
+    btnScan.innerText = "📷 MULAI SCAN";
+  }
+</script>
