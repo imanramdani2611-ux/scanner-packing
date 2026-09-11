@@ -337,10 +337,10 @@ statusPesananSaatIni = status;
 
 
           // ===============================================
-          // ANTRIAN PACKING
-          // ===============================================
+// ANTRIAN PACKING
+// ===============================================
 
-          if (status === "ANTRIAN PACKING") {
+if (status === "ANTRIAN PACKING") {
 
   document.getElementById("hasil").innerHTML =
     "🟠 <b>NOTA-NYA UDAH DI PACKING NIH</b>";
@@ -357,12 +357,14 @@ statusPesananSaatIni = status;
   document.getElementById("btnBelum").innerText =
     "❌ BELUM HEHE";
 
+  document.querySelector("#pilihan .info").innerText =
+    "Kalau belum selesai, status tetap ANTRIAN PACKING.";
+
   document.getElementById("pilihan").style.display =
     "block";
 
   return;
 }
-
 
           // ===============================================
           // SUDAH PACKING
