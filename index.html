@@ -169,6 +169,7 @@
     let scanner = null;
     let nomorPesanan = "";
     let sedangMemproses = false;
+    let statusPesananSaatIni = "";
 
 
     // =====================================================
@@ -308,10 +309,12 @@
 
 
           const status =
-            (data.status || "")
-              .toString()
-              .trim()
-              .toUpperCase();
+  (data.status || "")
+    .toString()
+    .trim()
+    .toUpperCase();
+
+statusPesananSaatIni = status;
 
 
           // ===============================================
@@ -334,18 +337,31 @@
 
 
           // ===============================================
-          // ANTRIAN FINISHING
+          // ANTRIAN PACKING
           // ===============================================
 
-          if (status === "ANTRIAN FINISHING") {
+          if (status === "ANTRIAN PACKING") {
 
-            tampilkanPesan(
-              "🟠 NOTANYA SEDANG DALAM ANTRIAN PACKING",
-              "Nomor Pesanan: " + nomor
-            );
+  document.getElementById("hasil").innerHTML =
+    "🟠 <b>NOTA-NYA UDAH DI PACKING NIH</b>";
 
-            return;
-          }
+  document.getElementById("nomorTampil").innerText =
+    "Nomor Pesanan: " + nomor;
+
+  document.getElementById("pertanyaan").innerText =
+    "NOTA-NYA UDAH DI PACKING NIH";
+
+  document.getElementById("btnAda").innerText =
+    "📦 IYA UDAH";
+
+  document.getElementById("btnBelum").innerText =
+    "❌ BELUM HEHE";
+
+  document.getElementById("pilihan").style.display =
+    "block";
+
+  return;
+}
 
 
           // ===============================================
@@ -424,86 +440,97 @@
 
     function pilihBeres() {
 
-      document.getElementById("hasil").innerHTML =
-        "⏳ <b>MENGUBAH STATUS...</b>";
+  document.getElementById("hasil").innerHTML =
+    "⏳ <b>MENGUBAH STATUS...</b>";
 
-      document.getElementById("pilihan").style.display =
-        "none";
-
-
-      const callbackName =
-        "hasilBeres_" + Date.now();
+  document.getElementById("pilihan").style.display =
+    "none";
 
 
-      window[callbackName] = function(data) {
+  const callbackName =
+    "hasilBeres_" + Date.now();
 
-        try {
 
-          if (
-            data &&
-            data.success &&
-            data.berubah
-          ) {
+  window[callbackName] = function(data) {
 
-            tampilkanPesan(
-              "🟢 BERHASIL!",
-              "NOTA MASUK ANTRIAN PACKING\n\n" +
-              "Nomor Pesanan: " +
-              nomorPesanan
-            );
+    try {
 
-          }
+      if (
+        data &&
+        data.success &&
+        data.berubah
+      ) {
 
-          else {
+        if (data.status === "SUDAH PACKING") {
 
-            tampilkanPesan(
-              "⚠️ STATUS TIDAK DIUBAH",
-              data && data.message
-                ? data.message
-                : "Pesanan sudah berubah status."
-            );
+          tampilkanPesan(
+            "🟢 BERHASIL!",
+            "NOTA SUDAH DI PACKING SIAP KIRIM\n\n" +
+            "Nomor Pesanan: " +
+            nomorPesanan
+          );
 
-          }
+        } else {
+
+          tampilkanPesan(
+            "🟢 BERHASIL!",
+            "PESANAN MASUK ANTRIAN PACKING\n\n" +
+            "Nomor Pesanan: " +
+            nomorPesanan
+          );
 
         }
 
-        finally {
-
-          delete window[callbackName];
-
-        }
-
-      };
-
-
-      const script =
-        document.createElement("script");
-
-
-      script.src =
-        API_URL +
-        "?action=beres" +
-        "&nomor=" +
-        encodeURIComponent(nomorPesanan) +
-        "&callback=" +
-        callbackName;
-
-
-      script.onerror = function() {
+      } else {
 
         tampilkanPesan(
-          "❌ GAGAL MENGUBAH STATUS",
-          "Coba scan kembali."
+          "⚠️ STATUS TIDAK DIUBAH",
+          data && data.message
+            ? data.message
+            : "Pesanan sudah berubah status."
         );
 
-        delete window[callbackName];
-
-      };
-
-
-      document.body.appendChild(script);
+      }
 
     }
+
+    finally {
+
+      delete window[callbackName];
+
+    }
+
+  };
+
+
+  const script =
+    document.createElement("script");
+
+
+  script.src =
+    API_URL +
+    "?action=beres" +
+    "&nomor=" +
+    encodeURIComponent(nomorPesanan) +
+    "&callback=" +
+    callbackName;
+
+
+  script.onerror = function() {
+
+    tampilkanPesan(
+      "❌ YAH GAGAL MENGUBAH STATUS",
+      "Coba scan lagi ya."
+    );
+
+    delete window[callbackName];
+
+  };
+
+
+  document.body.appendChild(script);
+
+}
 
 
     // =====================================================
