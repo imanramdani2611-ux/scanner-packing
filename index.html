@@ -109,41 +109,6 @@
       font-size: 23px;
       color: #555;
     }
-
-    /* =====================================================
-       GAMBAR DESAIN FINAL
-       ===================================================== */
-
-    .desain-final-box {
-      margin-top: 25px;
-      padding-top: 20px;
-      border-top: 2px solid #eee;
-    }
-
-    .desain-final-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
-
-    .desain-final {
-      display: block;
-      width: 100%;
-      max-width: 560px;
-      height: auto;
-      margin: 0 auto;
-      border-radius: 14px;
-      box-shadow: 0 3px 15px rgba(0,0,0,.18);
-      cursor: pointer;
-    }
-
-    .desain-final-info {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #777;
-      font-weight: normal;
-    }
-
   </style>
 </head>
 
@@ -297,134 +262,6 @@
 
 
     // =====================================================
-    // TAMPILKAN GAMBAR DESAIN FINAL
-    // =====================================================
-
-    function tampilkanDesainFinal(gambar) {
-
-      if (!gambar) return;
-
-      if (!gambar.success) return;
-
-      if (!gambar.base64) return;
-
-
-      const hasil =
-        document.getElementById("hasil");
-
-
-      const mimeType =
-        gambar.mimeType || "image/jpeg";
-
-
-      const gambarSrc =
-        "data:" +
-        mimeType +
-        ";base64," +
-        gambar.base64;
-
-
-      hasil.innerHTML +=
-
-        '<div class="desain-final-box">' +
-
-          '<div class="desain-final-title">' +
-            '🖼️ DESAIN FINAL' +
-          '</div>' +
-
-          '<img ' +
-            'src="' + gambarSrc + '" ' +
-            'class="desain-final" ' +
-            'onclick="bukaGambar(this.src)" ' +
-            'alt="Desain Final">' +
-
-          '<div class="desain-final-info">' +
-            '👆 Klik gambar untuk melihat ukuran besar' +
-          '</div>' +
-
-        '</div>';
-
-    }
-
-
-    // =====================================================
-    // BUKA GAMBAR BESAR
-    // =====================================================
-
-    function bukaGambar(src) {
-
-      const jendela =
-        window.open("", "_blank");
-
-      if (!jendela) {
-
-        alert(
-          "Browser memblokir halaman baru. " +
-          "Silakan izinkan pop-up untuk scanner ini."
-        );
-
-        return;
-
-      }
-
-
-      jendela.document.write(
-
-        '<!DOCTYPE html>' +
-
-        '<html>' +
-
-        '<head>' +
-
-          '<meta name="viewport" ' +
-          'content="width=device-width, initial-scale=1.0">' +
-
-          '<title>Desain Final</title>' +
-
-          '<style>' +
-
-            'html,body{' +
-              'margin:0;' +
-              'padding:0;' +
-              'width:100%;' +
-              'height:100%;' +
-              'background:#111;' +
-            '}' +
-
-            'body{' +
-              'display:flex;' +
-              'align-items:center;' +
-              'justify-content:center;' +
-            '}' +
-
-            'img{' +
-              'max-width:100%;' +
-              'max-height:100%;' +
-              'object-fit:contain;' +
-            '}' +
-
-          '</style>' +
-
-        '</head>' +
-
-        '<body>' +
-
-          '<img src="' +
-          src +
-          '">' +
-
-        '</body>' +
-
-        '</html>'
-
-      );
-
-      jendela.document.close();
-
-    }
-
-
-    // =====================================================
     // CEK NOMOR KE GOOGLE SHEETS
     // =====================================================
 
@@ -472,13 +309,12 @@
 
 
           const status =
-            (data.status || "")
-              .toString()
-              .trim()
-              .toUpperCase();
+  (data.status || "")
+    .toString()
+    .trim()
+    .toUpperCase();
 
-
-          statusPesananSaatIni = status;
+statusPesananSaatIni = status;
 
 
           // ===============================================
@@ -496,72 +332,39 @@
             document.getElementById("pilihan").style.display =
               "block";
 
-
-            // ---------------------------------------------
-            // TAMPILKAN DESAIN FINAL
-            // ---------------------------------------------
-
-            if (
-              data.gambar &&
-              data.gambar.success &&
-              data.gambar.base64
-            ) {
-
-              tampilkanDesainFinal(data.gambar);
-
-            }
-
-
             return;
           }
 
 
           // ===============================================
-          // ANTRIAN PACKING
-          // ===============================================
+// ANTRIAN PACKING
+// ===============================================
 
-          if (status === "ANTRIAN PACKING") {
+if (status === "ANTRIAN PACKING") {
 
-            document.getElementById("hasil").innerHTML =
-              "🟠 <b>NOTA-NYA UDAH DI PACKING NIH</b>";
+  document.getElementById("hasil").innerHTML =
+    "🟠 <b>NOTA-NYA UDAH DI PACKING NIH</b>";
 
-            document.getElementById("nomorTampil").innerText =
-              "Nomor Pesanan: " + nomor;
+  document.getElementById("nomorTampil").innerText =
+    "Nomor Pesanan: " + nomor;
 
-            document.getElementById("pertanyaan").innerText =
-              "NOTA-NYA UDAH DI PACKING NIH";
+  document.getElementById("pertanyaan").innerText =
+    "NOTA-NYA UDAH DI PACKING NIH";
 
-            document.getElementById("btnAda").innerText =
-              "📦 IYA UDAH";
+  document.getElementById("btnAda").innerText =
+    "📦 IYA UDAH";
 
-            document.getElementById("btnBelum").innerText =
-              "❌ BELUM HEHE";
+  document.getElementById("btnBelum").innerText =
+    "❌ BELUM HEHE";
 
-            document.querySelector("#pilihan .info").innerText =
-              "Kalau belum selesai, status tetap ANTRIAN PACKING.";
+  document.querySelector("#pilihan .info").innerText =
+    "Kalau belum selesai, status tetap ANTRIAN PACKING.";
 
-            document.getElementById("pilihan").style.display =
-              "block";
+  document.getElementById("pilihan").style.display =
+    "block";
 
-
-            // ---------------------------------------------
-            // TAMPILKAN DESAIN FINAL
-            // ---------------------------------------------
-
-            if (
-              data.gambar &&
-              data.gambar.success &&
-              data.gambar.base64
-            ) {
-
-              tampilkanDesainFinal(data.gambar);
-
-            }
-
-
-            return;
-          }
-
+  return;
+}
 
           // ===============================================
           // SUDAH PACKING
@@ -569,83 +372,10 @@
 
           if (status === "SUDAH PACKING") {
 
-            document.getElementById("hasil").innerHTML =
-              "🟢 <b>NOTA SUDAH DI PACKING SIAP KIRIM</b><br><br>" +
-              "Nomor Pesanan: " + nomor;
-
-
-            // ---------------------------------------------
-            // TAMPILKAN DESAIN FINAL
-            // ---------------------------------------------
-
-            if (
-              data.gambar &&
-              data.gambar.success &&
-              data.gambar.base64
-            ) {
-
-              tampilkanDesainFinal(data.gambar);
-
-            }
-
-
-            setTimeout(function() {
-
-              nomorPesanan = "";
-              sedangMemproses = false;
-
-
-              document.getElementById("hasil").innerHTML =
-                "📷 <b>SIAP SCAN LAGI</b><br><br>" +
-                "Arahkan kamera ke barcode pesanan.";
-
-
-              if (scanner) {
-
-                try {
-                  scanner.resume();
-                }
-
-                catch (e) {
-
-                  try {
-
-                    scanner.stop()
-                      .then(function() {
-
-                        scanner.clear();
-                        scanner = null;
-                        mulaiScanner();
-
-                      })
-                      .catch(function() {
-
-                        scanner = null;
-                        mulaiScanner();
-
-                      });
-
-                  }
-
-                  catch (err) {
-
-                    scanner = null;
-                    mulaiScanner();
-
-                  }
-
-                }
-
-              }
-
-              else {
-
-                mulaiScanner();
-
-              }
-
-            }, 4000);
-
+            tampilkanPesan(
+              "🟢 NOTA SUDAH DI PACKING SIAP KIRIM",
+              "Nomor Pesanan: " + nomor
+            );
 
             return;
           }
@@ -712,97 +442,97 @@
 
     function pilihBeres() {
 
-      document.getElementById("hasil").innerHTML =
-        "⏳ <b>MENGUBAH STATUS...</b>";
+  document.getElementById("hasil").innerHTML =
+    "⏳ <b>MENGUBAH STATUS...</b>";
 
-      document.getElementById("pilihan").style.display =
-        "none";
-
-
-      const callbackName =
-        "hasilBeres_" + Date.now();
+  document.getElementById("pilihan").style.display =
+    "none";
 
 
-      window[callbackName] = function(data) {
+  const callbackName =
+    "hasilBeres_" + Date.now();
 
-        try {
 
-          if (
-            data &&
-            data.success &&
-            data.berubah
-          ) {
+  window[callbackName] = function(data) {
 
-            if (data.status === "SUDAH PACKING") {
+    try {
 
-              tampilkanPesan(
-                "🟢 BERHASIL!",
-                "NOTA SUDAH DI PACKING SIAP KIRIM\n\n" +
-                "Nomor Pesanan: " +
-                nomorPesanan
-              );
+      if (
+        data &&
+        data.success &&
+        data.berubah
+      ) {
 
-            } else {
+        if (data.status === "SUDAH PACKING") {
 
-              tampilkanPesan(
-                "🟢 BERHASIL!",
-                "PESANAN MASUK ANTRIAN PACKING\n\n" +
-                "Nomor Pesanan: " +
-                nomorPesanan
-              );
+          tampilkanPesan(
+            "🟢 BERHASIL!",
+            "NOTA SUDAH DI PACKING SIAP KIRIM\n\n" +
+            "Nomor Pesanan: " +
+            nomorPesanan
+          );
 
-            }
+        } else {
 
-          } else {
-
-            tampilkanPesan(
-              "⚠️ STATUS TIDAK DIUBAH",
-              data && data.message
-                ? data.message
-                : "Pesanan sudah berubah status."
-            );
-
-          }
+          tampilkanPesan(
+            "🟢 BERHASIL!",
+            "PESANAN MASUK ANTRIAN PACKING\n\n" +
+            "Nomor Pesanan: " +
+            nomorPesanan
+          );
 
         }
 
-        finally {
-
-          delete window[callbackName];
-
-        }
-
-      };
-
-
-      const script =
-        document.createElement("script");
-
-
-      script.src =
-        API_URL +
-        "?action=beres" +
-        "&nomor=" +
-        encodeURIComponent(nomorPesanan) +
-        "&callback=" +
-        callbackName;
-
-
-      script.onerror = function() {
+      } else {
 
         tampilkanPesan(
-          "❌ YAH GAGAL MENGUBAH STATUS",
-          "Coba scan lagi ya."
+          "⚠️ STATUS TIDAK DIUBAH",
+          data && data.message
+            ? data.message
+            : "Pesanan sudah berubah status."
         );
 
-        delete window[callbackName];
-
-      };
-
-
-      document.body.appendChild(script);
+      }
 
     }
+
+    finally {
+
+      delete window[callbackName];
+
+    }
+
+  };
+
+
+  const script =
+    document.createElement("script");
+
+
+  script.src =
+    API_URL +
+    "?action=beres" +
+    "&nomor=" +
+    encodeURIComponent(nomorPesanan) +
+    "&callback=" +
+    callbackName;
+
+
+  script.onerror = function() {
+
+    tampilkanPesan(
+      "❌ YAH GAGAL MENGUBAH STATUS",
+      "Coba scan lagi ya."
+    );
+
+    delete window[callbackName];
+
+  };
+
+
+  document.body.appendChild(script);
+
+}
 
 
     // =====================================================
@@ -860,7 +590,6 @@
           catch (e) {
 
             // Kalau resume gagal, buka kamera ulang
-
             try {
 
               scanner.stop()
@@ -916,3 +645,4 @@
 
 </body>
 </html>
+
