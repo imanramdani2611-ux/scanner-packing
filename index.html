@@ -832,6 +832,7 @@ function cekPesanan(nomor) {
 
 /* =====================================================
    TAMPILKAN PESAN
+   PESAN PERMANEN SAMPAI SCAN BERIKUTNYA
    ===================================================== */
 
 function tampilkanPesan(
@@ -839,13 +840,10 @@ function tampilkanPesan(
   isi
 ) {
 
-
   document.getElementById("hasil").innerHTML =
 
     "<b>" +
-
     judul +
-
     "</b><br><br>" +
 
     isi.replace(
@@ -855,41 +853,19 @@ function tampilkanPesan(
 
 
   /*
-   * Beri jeda pendek supaya hasil masih sempat
-   * terlihat, lalu scanner dibuka kembali.
+   * JANGAN reset otomatis.
+   *
+   * Status akan tetap tampil bersama gambar
+   * sampai barcode berikutnya berhasil terbaca.
+   *
+   * Scanner tetap di-resume setelah hasil diterima.
    */
 
-  setTimeout(function() {
+  sedangMemproses = false;
 
-
-    nomorPesanan = "";
-
-    sedangMemproses = false;
-
-
-    document.getElementById("hasil").innerHTML =
-
-      "📷 <b>SIAP SCAN LAGI</b>" +
-
-      "<br><br>" +
-
-      "Arahkan kamera ke barcode pesanan.";
-
-
-    /*
-     * GAMBAR TIDAK DIHAPUS.
-     *
-     * Gambar baru akan menggantikan gambar lama
-     * ketika barcode berikutnya berhasil terbaca.
-     */
-
-    resumeScanner();
-
-
-  }, 500);
+  resumeScanner();
 
 }
-
 
 /* =====================================================
    JALANKAN KAMERA OTOMATIS
